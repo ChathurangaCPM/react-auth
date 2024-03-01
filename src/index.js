@@ -5,16 +5,26 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { AuthProvider } from './contex/authProvider';
+import useAuth from './hooks/useAuth';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+const Provider = () => {
+  const { auth, persist } = useAuth();
+  const providerValue = auth;
+  return(
+    <AuthProvider >
+      <Routes>
+        <Route path="/*" element={<App />} />
+      </Routes>
+    </AuthProvider>
+  )
+}
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AuthProvider>
-        <Routes>
-          <Route path="/*" element={<App />} />
-        </Routes>
-      </AuthProvider>
+      <Provider/>
     </BrowserRouter>
   </React.StrictMode>
 );

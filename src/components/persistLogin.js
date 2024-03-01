@@ -3,11 +3,14 @@ import React, { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom';
 import useRefreshToken from '../hooks/useRefreshToken';
 import useAuth from '../hooks/useAuth';
+import axiosInstance from '../api/axios';
 
 export default function PersistLogin() {
     const [isLoading, setIsLoading] = useState(true);
     const refresh = useRefreshToken();
     const { auth, persist } = useAuth();
+
+    console.log('auth===', auth);
 
     useEffect(() => {
         let isMounted = true;
@@ -15,6 +18,12 @@ export default function PersistLogin() {
         const verifyRefreshToken = async () => {
             try {
                 await refresh();
+                // const response = await axiosInstance.post('/auth/verifyToken', {
+                //     withCredentials: true,
+                // });
+
+                
+                // console.log('response ===', response);
             }
             catch (err) {
                 console.error(err);
@@ -28,12 +37,7 @@ export default function PersistLogin() {
         !auth?.accessToken && persist ? verifyRefreshToken() : setIsLoading(false);
 
         return () => isMounted = false;
-    }, [])
-
-    useEffect(() => {
-        console.log(`isLoading: ${isLoading}`)
-        console.log(`aT: ${auth?.accessToken}`)
-    }, [isLoading])
+    }, []);
 
     return (
         <>

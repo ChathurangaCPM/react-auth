@@ -5,10 +5,12 @@ import useAuth from '../../hooks/useAuth';
 const LOGIN_URL = '/auth/login';
 
 export default function Login() {
-    const { setAuth, persist, setPersist } = useAuth();
+    const { auth, setAuth, persist, setPersist, onLogin } = useAuth();
+    
 
     const navigate = useNavigate();
     const location = useLocation();
+
     const from = location?.state?.from.pathName || "/authPage";
 
     const userRef = useRef();
@@ -17,10 +19,6 @@ export default function Login() {
     const [email, setEmail] = useState('');
     const [pwd, setPwd] = useState('');
     const [errMsg, setErrMsg] = useState('');
-
-    useEffect(() => {
-        userRef.current.focus();
-    }, [])
 
     const togglePersist = () => {
         setPersist(prev => !prev);
@@ -42,15 +40,19 @@ export default function Login() {
 
             console.log(response);
             const accessToken = response?.data?.accessToken;
+            const refreshToken = response?.data?.refreshToken;
 
-            localStorage.setItem('token', accessToken);
+            localStorage.setItem('accessToken', accessToken);
+            // localStorage.setItem('refreshToken', refreshToken);
+
+            onLogin(response?.data);
+
             setAuth({ 
-                email: response?.data.user?.email, 
-                isDelete: response?.data.user?.isDelete, 
-                roles: response?.data.user?.roles, 
-                isEmisEmailVerified: response?.data.user?.isEmailVerified, 
+                user: response?.data.user,
                 accessToken,
+                refreshToken,
             });
+
             setEmail('');
             setPwd('');
 

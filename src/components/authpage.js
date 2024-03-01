@@ -2,13 +2,14 @@ import React from 'react'
 
 import { Link } from 'react-router-dom';
 import useRefreshToken from '../hooks/useRefreshToken';
+import useLogout from '../hooks/useLogout';
 
 
 export default function Authpage() {
-  const refresh = useRefreshToken();
+  const logout = useLogout();
   
   const logoutHandler = async () => {
-    await refresh();
+    await logout();
   }
   return (
     <div>

@@ -5,6 +5,7 @@ import useLogout from '../hooks/useLogout'
 import axios from '../api/axios';
 import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import useRefreshToken from '../hooks/useRefreshToken';
+import axiosInstance from '../api/axios';
 
 export default function Members() {
     const navigate = useNavigate();
@@ -13,17 +14,18 @@ export default function Members() {
     const refresh = useRefreshToken();
 
     const [users, setUsers] = useState();
-    const axiosPrivate = useAxiosPrivate();
+    
 
     const logoutHandler = async () => {
         await logout();
-        navigate('/login');
+        // navigate('/login');
     }
 
     useEffect(() => {
       const getUsers = async () => {
         try {
-          const res = await axiosPrivate.get('/users');
+          await refresh();
+          const res = await axiosInstance.get('/auth/employed');
 
           console.log('res ===', res);
 
