@@ -5,10 +5,11 @@ import useAuth from '../hooks/useAuth';
 export default function RequireAuth({ allowedRoles }) {
     const { auth } = useAuth();
     const location = useLocation();
-
+    const getLocal = localStorage.getItem('token');
+    console.log('getLocal ===', getLocal);
     return (
-        auth.role === allowedRoles ? <Outlet /> : auth?.accessToken //changed from user to accessToken to persist login after refresh
-            ? <Navigate to="/unauthorized" state={{ from: location }} replace />
+        auth.roles === allowedRoles ? <Outlet /> : auth?.accessToken //changed from user to accessToken to persist login after refresh
+            ? <Navigate to="/member" state={{ from: location }} replace />
             : <Navigate to="/login" state={{ from: location }} replace />
     )
 }

@@ -40,10 +40,17 @@ export default function Login() {
             }
             const response = await axios.post(LOGIN_URL, data);
 
-            //console.log(JSON.stringify(response));
+            console.log(response);
             const accessToken = response?.data?.accessToken;
 
-            setAuth({ ...response?.data.user, accessToken });
+            localStorage.setItem('token', accessToken);
+            setAuth({ 
+                email: response?.data.user?.email, 
+                isDelete: response?.data.user?.isDelete, 
+                roles: response?.data.user?.roles, 
+                isEmisEmailVerified: response?.data.user?.isEmailVerified, 
+                accessToken,
+            });
             setEmail('');
             setPwd('');
 
